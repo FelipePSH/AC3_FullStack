@@ -1,0 +1,49 @@
+<html>
+    <body>
+        <form id="name_form">
+            <label>Nome:</label><input type="text" name="name"/>
+            <br/>
+            <label>Time:</label><input type="text" team="team"/>
+            <br/>
+            <select id ="myCombo">
+             <option value="Atacante" selected >Atacante</option>
+             <option value="Central">Central</option>
+             <option value="Libero">Libero</option>
+             <option value="Levantador">Levantador</option>
+            </select>
+            <input type="submit" value="submit" />
+        </form>
+        <p id="parag"></p>
+        
+        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+        <script type="text/javascript">
+            $('#name_form').submit(function(e) {
+                    e.preventDefault();
+
+                    var formobj = {
+                       name: $('[name=name]').val(),
+                       team:$('[team=team]').val(),
+                       combo: $('#myCombo option:selected').val()
+                    }
+                   
+                    
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/jogador',
+                        dataType: 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify(formobj),
+                        success: function(callback) {
+                            console.log(callback);
+                            $("#parag").append("Respondeu: " + callback.name +'-'+ callback.team +'-'+callback.combo);
+                            $('#name_form').each (function(){this.reset();});
+                            
+                        },
+                        error: function() {
+                            $(this).html("error!");
+                        }
+                    });
+                });
+        </script>
+    </body>
+</html>
